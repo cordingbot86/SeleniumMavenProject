@@ -9,7 +9,7 @@ public class Project extends Framework{
 		typeIn("//input[@name='firstName']");
 		typeIn("//input[@name='lastName']");
 		clickIn("//input[@type='checkbox']");
-		clearIn("//input[@name='firstName']");
+		clearAll("//input[@name='firstName']");
 	}
 
 }
