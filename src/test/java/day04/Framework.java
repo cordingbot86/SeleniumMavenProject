@@ -1,9 +1,12 @@
-package day02;
+package day04;
 
-import java.io.File;
+ import java.io.File;
+import java.io.FileInputStream;
 import java.util.Set;
-
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -16,12 +19,12 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
-
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class Framework {
+
 	static WebDriver driver;
 	static ExtentReports report;
 	static ExtentTest test;
@@ -54,44 +57,44 @@ public class Framework {
 		test.log(LogStatus.INFO, "Open application url: "+url);
 	}
 
-	public static void typeIn(String xpathValue,String dataValue,String fieldName)
+	public static void typeIn(String fieldName) throws Exception
 	{
-		driver.findElement(By.xpath(xpathValue)).sendKeys(dataValue);
-		test.log(LogStatus.INFO, "User Enter Value in "+fieldName+" as "+dataValue);
+		driver.findElement(By.xpath(getXpath(fieldName))).sendKeys(getData(fieldName));
+		test.log(LogStatus.INFO, "User Enter Value in "+fieldName+" as "+getData(fieldName));
 	}
 
-	public static void clickIn(String xpathValue,String fieldName)
+	public static void clickIn(String fieldName) throws Exception
 	{
-		driver.findElement(By.xpath(xpathValue)).click();
+		driver.findElement(By.xpath(getXpath(fieldName))).click();
 		test.log(LogStatus.INFO, "User clicked in "+fieldName);
 	}
 
-	public static void clearAll(String xpathValue,String fieldName)
+	public static void clearAll(String fieldName) throws Exception
 	{
-		driver.findElement(By.xpath(xpathValue)).clear();
+		driver.findElement(By.xpath(getXpath(fieldName))).clear();
 		test.log(LogStatus.INFO, "User cleared data in "+fieldName);
 	}
 
-	public static void selDropdownByIndex(String xpathValue,int dataValue,String fieldName)
+	public static void selDropdownByIndex(String fieldName) throws Exception
 	{
-		Select dropDown = new Select(driver.findElement(By.xpath(xpathValue)));
-		dropDown.selectByIndex(dataValue);
-		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+dataValue);
+		Select dropDown = new Select(driver.findElement(By.xpath(getXpath(fieldName))));
+		dropDown.selectByIndex(Integer.parseInt(getData(fieldName)));
+		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+getData(fieldName));
 		
 	}
 
-	public static void selDropdownByValue(String xpathValue,String dataValue,String fieldName)
+	public static void selDropdownByValue(String fieldName)throws Exception
 	{
-		Select dropDown = new Select(driver.findElement(By.xpath(xpathValue)));
-		dropDown.selectByValue(dataValue);
-		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+dataValue);
+		Select dropDown = new Select(driver.findElement(By.xpath(getXpath(fieldName))));
+		dropDown.selectByValue(getData(fieldName));
+		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+getData(fieldName));
 		
 	}
-	public static void selDropdownByText(String xpathValue,String dataValue,String fieldName)
+	public static void selDropdownByText(String fieldName)throws Exception
 	{
-		Select dropDown = new Select(driver.findElement(By.xpath(xpathValue)));
-		dropDown.selectByVisibleText(dataValue);
-		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+dataValue);
+		Select dropDown = new Select(driver.findElement(By.xpath(getXpath(fieldName))));
+		dropDown.selectByVisibleText(getData(fieldName));
+		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+getData(fieldName));
 		
 	}
 
@@ -118,6 +121,7 @@ public class Framework {
 	{
 		driver.navigate().forward();
 	}
+
 	public static void browserRefresh()
 	{
 		driver.navigate().refresh();
@@ -260,6 +264,7 @@ public class Framework {
 	{
 		report.endTest(test);
 	}
+	
 	
 	
 	
