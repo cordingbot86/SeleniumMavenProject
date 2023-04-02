@@ -63,6 +63,18 @@ public class Framework {
 		test.log(LogStatus.INFO, "User Enter Value in "+fieldName+" as "+getData(fieldName));
 	}
 
+
+
+	public static String getData(String fieldName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static String getXpath(String fieldName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public static void clickIn(String fieldName) throws Exception
 	{
 		driver.findElement(By.xpath(getXpath(fieldName))).click();
