@@ -1,10 +1,21 @@
 package day05;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 public class Program05 {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	@Disabled
+	@Test
+	public void testcase01()
+	{
+		System.out.println("Log-IN");
 	}
-
+	
+	@Test
+	public void testcase02()
+	{
+		System.out.println("Log-OUT");
+	}
+	
 }
