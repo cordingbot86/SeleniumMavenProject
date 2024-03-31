@@ -1,9 +1,13 @@
 package test04;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -52,46 +56,50 @@ public class Framework {
 		test.log(LogStatus.INFO, "Open application url: "+url);
 	}
 
-	public static void typeIn(String xpathValue,String dataValue,String fieldName)
+	public static void typeIn(String fieldName) throws Exception
 	{
-		driver.findElement(By.xpath(xpathValue)).sendKeys(dataValue);
-		test.log(LogStatus.INFO, "User Enter Value in "+fieldName+" as "+dataValue);
+		driver.findElement(By.xpath(getXpath(fieldName))).sendKeys(getData(fieldName));
+		test.log(LogStatus.INFO, "User Enter Value in "+fieldName+" as "+getData(fieldName));
 	}
-
-	public static void clickIn(String xpathValue,String fieldName)
+	public static void clickIn(String fieldName) throws Exception
 	{
-		driver.findElement(By.xpath(xpathValue)).click();
+		driver.findElement(By.xpath(getXpath(fieldName))).click();
 		test.log(LogStatus.INFO, "User clicked in "+fieldName);
 	}
 
-	public static void clearAll(String xpathValue,String fieldName)
+
+	public static void clearAll(String fieldName) throws Exception
 	{
-		driver.findElement(By.xpath(xpathValue)).clear();
+		driver.findElement(By.xpath(getXpath(fieldName))).clear();
 		test.log(LogStatus.INFO, "User cleared data in "+fieldName);
 	}
 
-	public static void selDropdownByIndex(String xpathValue,int dataValue,String fieldName)
+
+	public static void selDropdownByIndex(String fieldName) throws Exception
 	{
-		Select dropDown = new Select(driver.findElement(By.xpath(xpathValue)));
-		dropDown.selectByIndex(dataValue);
-		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+dataValue);
+		Select dropDown = new Select(driver.findElement(By.xpath(getXpath(fieldName))));
+		dropDown.selectByIndex(Integer.parseInt(getData(fieldName)));
+		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+getData(fieldName));
 		
 	}
 
-	public static void selDropdownByValue(String xpathValue,String dataValue,String fieldName)
+
+	public static void selDropdownByValue(String fieldName)throws Exception
 	{
-		Select dropDown = new Select(driver.findElement(By.xpath(xpathValue)));
-		dropDown.selectByValue(dataValue);
-		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+dataValue);
+		Select dropDown = new Select(driver.findElement(By.xpath(getXpath(fieldName))));
+		dropDown.selectByValue(getData(fieldName));
+		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+getData(fieldName));
 		
 	}
-	public static void selDropdownByText(String xpathValue,String dataValue,String fieldName)
+
+	public static void selDropdownByText(String fieldName)throws Exception
 	{
-		Select dropDown = new Select(driver.findElement(By.xpath(xpathValue)));
-		dropDown.selectByVisibleText(dataValue);
-		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+dataValue);
+		Select dropDown = new Select(driver.findElement(By.xpath(getXpath(fieldName))));
+		dropDown.selectByVisibleText(getData(fieldName));
+		test.log(LogStatus.INFO, "User Selected dropdown in "+fieldName+ " as "+getData(fieldName));
 		
 	}
+
 
 	public static void windowMax()
 	{
@@ -173,54 +181,84 @@ public class Framework {
 		driver.switchTo().defaultContent();
 	}
 
-	public static void actiondragAndDrop(String src,String des)
+	public static void actionDragAndDrop(String src,String des)
 	{
-		Actions action=new Actions(driver);
-		WebElement srcxpath=driver.findElement(By.xpath(src));
-		WebElement desxpath=driver.findElement(By.xpath(des));
+		Actions action = new Actions(driver);
+		WebElement srcxpath = driver.findElement(By.xpath(src));
+		WebElement desxpath = driver.findElement(By.xpath(des));
 		action.dragAndDrop(srcxpath, desxpath).build().perform();
+
 	}
-	public static void actionDobleClick(String xpathValue)
+
+
+	public static void actionDoubleClick(String xpathValue)
 	{
-		Actions action=new Actions(driver);
-		WebElement src=driver.findElement(By.xpath(xpathValue));
-		
+		Actions action = new Actions(driver);
+		WebElement src = driver.findElement(By.xpath(xpathValue));
 		action.doubleClick(src).build().perform();
+
 	}
+
+
 	public static void actionClick(String xpathValue)
 	{
-		Actions action=new Actions(driver);
-		WebElement src=driver.findElement(By.xpath(xpathValue));
-				action.click(src).build().perform();
+		Actions action = new Actions(driver);
+		WebElement src = driver.findElement(By.xpath(xpathValue));
+		action.click(src).build().perform();
+
 	}
+
 	public static void actionRightClick(String xpathValue)
 	{
-		Actions action=new Actions(driver);
-		WebElement src=driver.findElement(By.xpath(xpathValue));
-		
+		Actions action = new Actions(driver);
+		WebElement src = driver.findElement(By.xpath(xpathValue));
 		action.contextClick(src).build().perform();
+
 	}
+
 	public static void actionMouseHover(String xpathValue)
 	{
-		Actions action=new Actions(driver);
-		WebElement src=driver.findElement(By.xpath(xpathValue));
-		
+		Actions action = new Actions(driver);
+		WebElement src = driver.findElement(By.xpath(xpathValue));
 		action.moveToElement(src).build().perform();
+
 	}
-	public static void takeScreenshot(String fileName) throws Exception
+
+	public static void takeScreenShot(String fileName) throws Exception
 	{
-		File scr=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-		File des=new File("./screenshot/"+fileName+"png");
-		FileUtils.copyFile(scr,des);
+		File scr = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		File des = new File("./ScreenShot/"+fileName+".png");
+		FileUtils.copyFile(scr, des);		
 	}
+
 	public static void startReport(String fileName)
 	{
 		report = new ExtentReports(".\\src\\test\\resources\\"+fileName+".html");	
 	}
 
+
+
 	public static void endReport()
 	{
 		report.flush();
+	}
+	
+
+	public static String getXpath(String fieldName) throws Exception {
+		File src=new File(".\\src\\test\\resources\\DataSheet.xlsx");
+		FileInputStream stream = new FileInputStream(src);
+		XSSFWorkbook wb = new XSSFWorkbook(stream);
+		XSSFSheet sh = wb.getSheet("demo");
+		DataFormatter data = new DataFormatter();
+		for(int i=1;i<sh.getLastRowNum();i++)
+		{
+			if(fieldName.equals(data.formatCellValue(sh.getRow(i).getCell(0))))
+			{
+				return(data.formatCellValue(sh.getRow(i).getCell(1)));
+				
+			}
+		}
+		return null;
 	}
 
 
@@ -234,7 +272,24 @@ public class Framework {
 	{
 		report.endTest(test);
 	}
+	public static String getData(String fieldName) throws Exception {
+		File src=new File(".\\src\\test\\resources\\DataSheet.xlsx");
+		FileInputStream stream = new FileInputStream(src);
+		XSSFWorkbook wb = new XSSFWorkbook(stream);
+	
+		XSSFSheet sh = wb.getSheet("demo");
+		DataFormatter data = new DataFormatter();
+		for(int i=1;i<sh.getLastRowNum();i++)
+		{
+			if(fieldName.equals(data.formatCellValue(sh.getRow(i).getCell(0))))
+				
+			{
+				return(data.formatCellValue(sh.getRow(i).getCell(2)));
+			
+			}
+		}
+		return null;
 
 	
-	
+	}
 }
